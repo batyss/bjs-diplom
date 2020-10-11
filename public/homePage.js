@@ -1,13 +1,13 @@
 'use strict';
 let button = new LogoutButton();
 button.action = () => ApiConnector.logout(response => {
-	if (response) {
+	if (response.success) {
 			location.reload();
 		} 
 });
 
 ApiConnector.current(response => {
-	if (response) {
+	if (response.success) {
 		ProfileWidget.showProfile(response.data);
 	} 
 });
@@ -16,7 +16,7 @@ let board = new RatesBoard();
 
 function requestRates() {
 	ApiConnector.getStocks(response => {
-		if (response) {
+		if (response.success) {
 			board.clearTable();
 			board.fillTable(response.data);
 		}
@@ -30,40 +30,40 @@ setInterval(requestRates,60000);
 let manager = new MoneyManager();
 manager.addMoneyCallback = data => {
 	ApiConnector.addMoney(data,response => {
-		try {
+		if (response.success) {
 			ProfileWidget.showProfile(response.data);
 			manager.setMessage(response,'Кошелёк пополнен!');
-		} catch(e) {
-		 	manager.setMessage(response, e);
+		} else {
+		 	manager.setMessage(response, response.error);
 		}
 	});
 };
 
 manager.conversionMoneyCallback = data => {
 	ApiConnector.convertMoney(data, response => {
-		try {
+		if (response.success) {
 			ProfileWidget.showProfile(response.data);
 			manager.setMessage(response,'Конвертация прошла успешно!');
-		} catch(e) {
-		 	manager.setMessage(response, e);
+		} else {
+		 	manager.setMessage(response, response.error);
 		}
 	});
 };
 
 manager.sendMoneyCallback = data => {
 	ApiConnector.transferMoney(data, response => {
-		try {
+		if (response.success) {
 			ProfileWidget.showProfile(response.data);
 			manager.setMessage(response,'Средства переведены!');
-		} catch(e) {
-		 	manager.setMessage(response, e);
+		} else {
+		 	manager.setMessage(response, response.error);
 		}
 	});
 };
 
 let favorite = new FavoritesWidget();
 ApiConnector.getFavorites(response => {
-	if (response) {
+	if (response.success) {
 		favorite.clearTable();
 		favorite.fillTable(response.data);
 		manager.updateUsersList(response.data);
@@ -72,26 +72,26 @@ ApiConnector.getFavorites(response => {
 
 favorite.addUserCallback = data => {
 	ApiConnector.addUserToFavorites(data, response => {
-		try {
+		if (response.success) {
 			favorite.clearTable();
 			favorite.fillTable(response.data);
 			manager.updateUsersList(response.data);
 			manager.setMessage(response,'Новый контакт добавлен!');
-		} catch(e) {
-		 	manager.setMessage(response, e);
+		} else {
+		 	manager.setMessage(response, response.error);
 		}
 	});
 };
 
 favorite.removeUserCallback = data => {
 	ApiConnector.removeUserFromFavorites(data, response => {
-		try {
+		if (response.success) {
 			favorite.clearTable();
 			favorite.fillTable(response.data);
 			manager.updateUsersList(response.data);
 			manager.setMessage(response,'Контакт успешно удален!');
-		} catch(e) {
-		 	manager.setMessage(response, e);
+		} else {
+		 	manager.setMessage(response, response.error);
 		}
 	});
 };
