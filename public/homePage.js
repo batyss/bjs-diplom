@@ -32,9 +32,9 @@ manager.addMoneyCallback = data => {
 	ApiConnector.addMoney(data,response => {
 		if (response.success) {
 			ProfileWidget.showProfile(response.data);
-			manager.setMessage(response,'Кошелёк пополнен!');
+			manager.setMessage(response.success,'Кошелёк пополнен!');
 		} else {
-		 	manager.setMessage(response, response.error);
+		 	manager.setMessage(response.success, response.error);
 		}
 	});
 };
@@ -43,9 +43,9 @@ manager.conversionMoneyCallback = data => {
 	ApiConnector.convertMoney(data, response => {
 		if (response.success) {
 			ProfileWidget.showProfile(response.data);
-			manager.setMessage(response,'Конвертация прошла успешно!');
+			manager.setMessage(response.success,'Конвертация прошла успешно!');
 		} else {
-		 	manager.setMessage(response, response.error);
+		 	manager.setMessage(response.success, response.error);
 		}
 	});
 };
@@ -54,9 +54,9 @@ manager.sendMoneyCallback = data => {
 	ApiConnector.transferMoney(data, response => {
 		if (response.success) {
 			ProfileWidget.showProfile(response.data);
-			manager.setMessage(response,'Средства переведены!');
+			manager.setMessage(response.success,'Средства переведены!');
 		} else {
-		 	manager.setMessage(response, response.error);
+		 	manager.setMessage(response.success, response.error);
 		}
 	});
 };
@@ -76,9 +76,9 @@ favorite.addUserCallback = data => {
 			favorite.clearTable();
 			favorite.fillTable(response.data);
 			manager.updateUsersList(response.data);
-			manager.setMessage(response,'Новый контакт добавлен!');
+			favorite.setMessage(response.success,'Новый контакт добавлен!');
 		} else {
-		 	manager.setMessage(response, response.error);
+		 	favorite.setMessage(response.success, response.error);
 		}
 	});
 };
@@ -89,9 +89,9 @@ favorite.removeUserCallback = data => {
 			favorite.clearTable();
 			favorite.fillTable(response.data);
 			manager.updateUsersList(response.data);
-			manager.setMessage(response,'Контакт успешно удален!');
+			favorite.setMessage(response.success,'Контакт успешно удален!');
 		} else {
-		 	manager.setMessage(response, response.error);
+		 	favorite.setMessage(response.success, response.error);
 		}
 	});
 };
